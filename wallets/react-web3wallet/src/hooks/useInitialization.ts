@@ -4,7 +4,7 @@ import { createOrRestoreEIP155Wallet } from '@/utils/EIP155WalletUtil'
 import { createOrRestoreSolanaWallet } from '@/utils/SolanaWalletUtil'
 import { createOrRestorePolkadotWallet } from '@/utils/PolkadotWalletUtil'
 import { createOrRestoreMultiversxWallet } from '@/utils/MultiversxWalletUtil'
-import { createWeb3Wallet } from '@/utils/WalletConnectUtil'
+import { createEthereumProvider, createWeb3Wallet } from '@/utils/WalletConnectUtil'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSnapshot } from 'valtio'
 import { createOrRestoreNearWallet } from '@/utils/NearWalletUtil'
@@ -31,10 +31,12 @@ export default function useInitialization() {
       SettingsStore.setNearAddress(nearAddresses[0])
       SettingsStore.setMultiversxAddress(multiversxAddresses[0])
       prevRelayerURLValue.current = relayerRegionURL
-
       await createWeb3Wallet(relayerRegionURL)
+      await createEthereumProvider()
 
       setInitialized(true)
+
+      console.log('initialised success')
     } catch (err: unknown) {
       alert(err)
     }

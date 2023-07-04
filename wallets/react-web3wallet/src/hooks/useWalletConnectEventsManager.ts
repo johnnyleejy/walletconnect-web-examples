@@ -17,6 +17,7 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
    *****************************************************************************/
   const onSessionProposal = useCallback(
     (proposal: SignClientTypes.EventArguments['session_proposal']) => {
+      console.log(proposal)
       ModalStore.open('SessionProposalModal', { proposal })
     },
     []
@@ -98,6 +99,7 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
     if (initialized) {
       // sign
       web3wallet.on('session_proposal', onSessionProposal)
+      console.log(web3wallet)
       web3wallet.on('session_request', onSessionRequest)
       // auth
       web3wallet.on('auth_request', onAuthRequest)

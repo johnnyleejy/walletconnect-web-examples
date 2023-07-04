@@ -1,8 +1,10 @@
 import { Core } from '@walletconnect/core'
 import { ICore } from '@walletconnect/types'
 import { Web3Wallet, IWeb3Wallet } from '@walletconnect/web3wallet'
+import EthereumProvider from '@walletconnect/ethereum-provider'
 export let web3wallet: IWeb3Wallet
 export let core: ICore
+export let ethereumProvider: EthereumProvider
 
 export async function createWeb3Wallet(relayerRegionURL: string) {
   core = new Core({
@@ -22,6 +24,23 @@ export async function createWeb3Wallet(relayerRegionURL: string) {
   })
 }
 
+export async function createEthereumProvider() {
+  // Init ethereum provider
+  ethereumProvider = await EthereumProvider.init({
+    optionalChains: [1337],
+    projectId: '89080488436c9df43eebf70e7e490918',
+    showQrModal: true,
+    qrModalOptions: { enableExplorer: false },
+    chains: [1],
+    rpcMap: {
+      1337: 'http:localhost:8540'
+    },
+    methods: ['eth_sendTransaction', 'eth_signTypedData_v4', 'personal_sign'],
+    events: ['chainChanged', 'accountsChanged']
+  })
+}
+
 export async function pair(params: { uri: string }) {
-  return await core.pairing.pair({ uri: params.uri })
+  console.log(params)
+  return await web3wallet.pair({ uri: params.uri })
 }

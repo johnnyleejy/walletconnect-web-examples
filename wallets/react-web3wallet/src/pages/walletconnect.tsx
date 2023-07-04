@@ -1,6 +1,6 @@
 import PageHeader from '@/components/PageHeader'
 import QrReader from '@/components/QrReader'
-import { pair } from '@/utils/WalletConnectUtil'
+import { pair, ethereumProvider } from '@/utils/WalletConnectUtil'
 import { Button, Input, Loading, Text } from '@nextui-org/react'
 import { Fragment, useState } from 'react'
 
@@ -11,6 +11,7 @@ export default function WalletConnectPage() {
   async function onConnect(uri: string) {
     try {
       setLoading(true)
+      console.log(uri)
       await pair({ uri })
     } catch (err: unknown) {
       alert(err)
@@ -20,10 +21,22 @@ export default function WalletConnectPage() {
     }
   }
 
+  async function mockDappConnect() {
+    try {
+      await ethereumProvider.connect()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Fragment>
       <PageHeader title="WalletConnect" />
 
+      <div>Mock Dapp</div>
+      <Button size="xs" onClick={() => mockDappConnect()} color="gradient">
+        {loading ? <Loading size="sm" /> : 'Connect'}
+      </Button>
       <QrReader onConnect={onConnect} />
 
       <Text size={13} css={{ textAlign: 'center', marginTop: '$10', marginBottom: '$10' }}>
